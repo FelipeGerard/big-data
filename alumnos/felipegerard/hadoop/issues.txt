@@ -1,0 +1,25 @@
+
+
+service impala-server stop
+sudo service impala-catalog stop
+sudo service impala-state-store stop
+sudo service spark-master stop
+sudo service spark-worker stop
+
+En /etc/hadoop/conf.pseudo/mapred-site.xml agregué:
+<property>
+<name>mapreduce.map.memory.mb</name>
+<value>1024</value>
+<description>Larger resource limit for maps.</description>
+</property>
+
+➜  ~  service hive-metastore status
+* Hive Metastore is running
+➜  ~  service hive-server2 status
+* Hive Server2 is running
+➜  ~  service hive-webhcat-server status
+* WEBHCat server is running
+➜  ~  service hadoop-yarn-resourcemanager status
+* Hadoop resourcemanager is running
+➜  ~  service hadoop-yarn-nodemanager status
+* Hadoop nodemanager is running

@@ -2,29 +2,35 @@
 beeline -n itam -u jdbc:hive2://localhost:10000
 
 -- Limpiamos el ambiente
-delete table shakespeare;
-delete table wordcount;
+-- delete table shakespeare;
+-- delete table wordcount;
 
 -- Creamos la tabla que contendrá las obras de Shakespeare
-create table shakespeare(linea string);
+create table shakespeare2(linea string);
 
 -- Verifiamos
 show tables;
 
 -- Cargamos los datos a la tabla
-load data inpath '/user/itam/books/pg100.txt' overwrite into table shakespeare;
+load data inpath '/user/itam/books/pg100.txt' overwrite into table shakespeare2;
 
 -- Quereamos y guardamos en una tabla
 -- Los símbolos raros '\\p{Punct}' y similares son expresiones regulares de Java
-create table wordcount as
+-- Primero quitamos puntuación, etc, y pasamos a minúsculas. Luego con split generamos un array con las palabras del renglón y luego con explode pasamos del array a una entrada por palabra. Luego simplemente sumarizamos y ordenamos.
+create table wordcount2 as
 select palabra, count(*) as conteo from
 (
 select
 explode(split(lcase(regexp_replace(trim(linea),'[\\p{Punct}, \\p{Cntrl}]', ' ')), ' ')) as palabra
-from shakespeare
+from shakespeare2
 ) palabras
 group by palabra
-order by conteo desc limit 10;
+order by conteo desc;
+
+-- Tomamos los primeros.
+select *
+from wordcount2
+limit 20;
 -- Este código  se podría hacer más pequeño con LATERAL (¿Recuerdan la clase de PostgreSQL?)
 
 
