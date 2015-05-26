@@ -1,0 +1,28 @@
+------------
+GDELT
+------------
+
+* Obtención
+    + Diariamente (a una hora fija), scrappear la página de GDELT para ver si han subido algo nuevo.
+    + Cuando suban algo nuevo, bajar las bases nuevas (CSV).
+* Limpieza
+    + Limpiar y validar el CSV (bash).
+* Carga
+    + Postgres
+	- Subir los datos nuevos y actualizar las estadísticas.
+	- Actualizar los índices.
+    + Hadoop
+	- Subir al HDFS y agregarlo al dataset en formato Avro.
+* Manipulación
+    + Actualizar bases resumidas para el Shiny (series de tiempo, etc) dentro de Postgres.
+    + Agregar los nuevos datos al Parquet para analítica dentro del HDFS.
+
+------------
+Pipeline
+------------
+
+Obtención --> Limpieza --> Carga --> Preparación, Agregación, Análisis
+
+cron? sleep? ----- awk,sed,... --- flume ---- luigi,pig,hive
+
+
